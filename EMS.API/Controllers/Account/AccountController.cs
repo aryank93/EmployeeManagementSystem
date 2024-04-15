@@ -58,12 +58,13 @@ namespace EMS.API.Controllers.Account
             #region Login Endpoint
 
             [HttpPost("login")]
-            public async Task<IActionResult> LoginAsync([FromForm] Login model)
+            public async Task<IActionResult> LoginAsync([FromBody] Login user)
             {
+
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var result = await _authService.LoginAsync(model);
+                var result = await _authService.LoginAsync(user);
 
                 if (!result.ISAuthenticated)
                     return BadRequest(result.Message);

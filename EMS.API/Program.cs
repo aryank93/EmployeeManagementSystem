@@ -44,6 +44,18 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyAllowSpecificOrigins",
+                      builder =>
+                      {
+                          builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                      });
+});
+
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -100,6 +112,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("MyAllowSpecificOrigins");
 
 app.UseAuthentication();
 
